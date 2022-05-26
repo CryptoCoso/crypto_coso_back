@@ -7,6 +7,7 @@ import {
   PinataMetadata,
   PinataPinListFilterOptions,
   PinataPinOptions,
+  PinataPinPolicyItem,
 } from '@pinata/sdk';
 const pinataSDK = require('@pinata/sdk');
 const { Readable } = require('stream');
@@ -33,11 +34,10 @@ const getPinOptions = (where: string): PinataPinOptions => {
   return {
     pinataMetadata: {
       name: where,
-      type: where,
     },
-    pinataOptions: {
-      wrapWithDirectory: true,
-    },
+    // pinataOptions: {
+    //   wrapWithDirectory: true,
+    // },
   };
 };
 
@@ -69,32 +69,33 @@ export class AppService {
   }
 
   async mintNft(img: any, { metadata }: MetadataBody): Promise<any> {
-    console.log(JSON.parse(metadata), img);
+    console.log(img);
     let stream = Readable.from(img.buffer);
-    stream.path = new Date().toString();
-    const imgInIPFS = await pinata.pinFileToIPFS(
-      stream,
-      getPinOptions('images'),
-    );
-    console.log({ imgInIPFS });
+    const name = `${Math.floor(
+      Math.random() * 100000,
+    )}-${new Date().toString()}`;
+    stream.path = name;
+    const imgInIPFS = await pinata.pinFileToIPFS(stream);
     const newMeta = {
       ...JSON.parse(metadata),
       properties: {
         files: [
           {
-            uri: `ipfs://${imgInIPFS.IpfsHash}/${img.originalname}`,
-            type: 'image',
+            uri: `ipfs://${imgInIPFS.IpfsHash}`, // se suben no a un folder, entonces ya no va la refe a la imagen adentro de ese cid, ese cid es la imagen (YA VUELVO) daleee
+            type: img.mimetype,
           },
         ],
       },
     };
     const metadataInIPFS = await pinata.pinJSONToIPFS(
       newMeta,
-      getPinOptions('metadata'),
+      getPinOptions(name),
     );
-    console.log({ metadataInIPFS });
-    return {
-      
+    const res = {
+      metadata: metadataInIPFS.IpfsHash,
+      image: imgInIPFS.IpfsHash,
+      message: 'Your NFT image and metadata has been created!',
     };
+    return res;
   }
 }

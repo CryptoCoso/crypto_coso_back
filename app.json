@@ -1,0 +1,25 @@
+{
+  "name": "HOUSE RENTING PROPEA",
+  "symbol": "HRP",
+  "description": "House Rental Propea, Inc. (HRP) Prices, Dividends, Splits and Trading Volume",
+  "seller_fee_basis_points": 150,
+  "image": "0.jpeg",
+  "attributes": [
+    {
+      "trait_type": "house_type",
+      "value": "House"
+    },
+    {
+      "trait_type": "backyard",
+      "value": "yes"
+    },
+    {
+      "trait_type": "garage",
+      "value": "yes"
+    }
+  ],
+  "collection": {
+    "name": "Renting",
+    "family": "RENT"
+  }
+}

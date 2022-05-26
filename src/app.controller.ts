@@ -46,6 +46,6 @@ export class AppController {
   @Post('/create-nft')
   @UseInterceptors(FileInterceptor('image'))
   async uploadMetadata(@UploadedFile() file, @Body() body): Promise<any> {
-    await this.appService.mintNft(file, body);
+    return await this.appService.mintNft(file, body);
   }
 }
