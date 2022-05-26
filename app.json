@@ -1,25 +1,29 @@
 {
-  "name": "HOUSE RENTING PROPEA",
-  "symbol": "HRP",
-  "description": "House Rental Propea, Inc. (HRP) Prices, Dividends, Splits and Trading Volume",
-  "seller_fee_basis_points": 150,
-  "image": "0.jpeg",
-  "attributes": [
-    {
-      "trait_type": "house_type",
-      "value": "House"
-    },
-    {
-      "trait_type": "backyard",
-      "value": "yes"
-    },
-    {
-      "trait_type": "garage",
-      "value": "yes"
+  "name": "ToolJet",
+  "description": "ToolJet is an open-source low-code framework to build and deploy internal tools.",
+  "website": "https://tooljet.io/",
+  "repository": "https://github.com/tooljet/tooljet",
+  "logo": "https://app.tooljet.io/assets/images/logo.svg",
+  "success_url": "/",
+  "scripts":{
+    "predeploy": "npm install && npm run build"
+  },
+  "env": {
+    "NODE_ENV": {
+      "description": "Environment [production/development]",
+      "value": "production"
     }
-  ],
-  "collection": {
-    "name": "Renting",
-    "family": "RENT"
-  }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "image": "heroku/nodejs",
+  "addons": ["heroku-postgresql"],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
 }
