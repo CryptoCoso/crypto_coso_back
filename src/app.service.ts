@@ -1,3 +1,6 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import {
   PinataClient,
@@ -5,9 +8,8 @@ import {
   PinataPinListFilterOptions,
   PinataPinOptions,
 } from '@pinata/sdk';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const pinataSDK = require('@pinata/sdk');
-import { Readable } from 'stream';
+const { Readable } = require('stream');
 
 const pinata: PinataClient = pinataSDK(
   '44e1902fce98eae3f419',
@@ -30,6 +32,7 @@ const getFilter = (type: string): PinataPinListFilterOptions => {
 const getPinOptions = (where: string): PinataPinOptions => {
   return {
     pinataMetadata: {
+      name: where,
       type: where,
     },
     pinataOptions: {
@@ -66,12 +69,14 @@ export class AppService {
   }
 
   async mintNft(img: any, { metadata }: MetadataBody): Promise<any> {
-    console.log(JSON.parse(metadata));
+    console.log(JSON.parse(metadata), img);
+    let stream = Readable.from(img.buffer);
+    stream.path = new Date().toString();
     const imgInIPFS = await pinata.pinFileToIPFS(
-      Readable.from(img.buffer.toString()),
+      stream,
       getPinOptions('images'),
     );
-    console.log(imgInIPFS);
+    console.log({ imgInIPFS });
     const newMeta = {
       ...JSON.parse(metadata),
       properties: {
@@ -89,9 +94,7 @@ export class AppService {
     );
     console.log({ metadataInIPFS });
     return {
-      message: 'Metadata uploaded successfully',
-      metadata: metadataInIPFS,
-      code: 420,
+      
     };
   }
 }
